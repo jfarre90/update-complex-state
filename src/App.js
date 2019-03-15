@@ -26,16 +26,20 @@ class App extends Component {
       const randomInstructorIndex = Math.floor(Math.random()*this.state.instructors.length);
       const randomHobbyIndex = Math.floor(Math.random()*this.state.instructors[randomInstructorIndex]);
       
-      const instructors = this.state.instructors.map((inst,i) => (
-        i === randomInstructorIndex ? {
-          ...inst,
-          hobbies: [...inst.hobbies.slice(0, randomHobbyIndex).concat(inst.hobbies.slice(randomHobbyIndex+1, inst.hobbies.length))]
-          
-        } : inst
+      const instructors = this.state.instructors.map((inst,i) => {
+        if (i === randomInstructorIndex) {
+          const hobbies = [...inst.hobbies]; //the spread does the same as inst.hobbies.slice();
+          hobbies.splice(randomHobbyIndex,1);
+          return{
+            ...inst,
+          };
+        }
         
-      ));
-        
-    },5000) // Using arrow function to preserve the "this" definition.
+        return inst;
+
+      });
+      this.setState({instructors});
+    },5000); // Using arrow function to preserve the "this" definition.
   }
   render() {
     const instructors = this.state.instructors.map((instructor, index) => (
